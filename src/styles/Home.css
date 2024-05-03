@@ -1,0 +1,117 @@
+.home {
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+
+/*-webkit-filter: blur(5px);*/
+/*-moz-filter: blur(5px);*/
+/*-o-filter: blur(5px);*/
+/*-ms-filter: blur(5px);*/
+/*filter: blur(5px);*/
+
+.headerContainer {
+    color: #000;
+    width: auto;
+    padding: 10px 40px;
+    background-color: rgba(255,255,255,0.6);
+    border-radius: 0 10px 10px 0;
+}
+
+.headerContainer h1 {
+    font-size: 90px;
+    line-height: 1.17;
+    margin-bottom: 12px;
+    font-weight: 50;
+    font-family: JetSansDigital,Arial,sans-serif;
+    padding: 0;
+    box-sizing: inherit;
+    justify-content: center;
+    align-items: center;
+    /* color: #3d7ac1; */
+}
+
+.headerContainer p {
+    font-size: 30px;
+    line-height: 1.4;
+    font-weight: lighter;
+    font-family: JetSansDigital,Arial,sans-serif;
+    margin: 0;
+    padding: 1rem 1rem 4rem ;
+    text-align: center;
+    font-size: 40px;
+}
+
+.headerContainer button {
+
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    justify-content: center;
+    background-color: #3d7ac1;
+    color: white;
+    height: 50px;
+    width: 180px;
+    text-decoration: none;
+    font-size: 20px;
+    margin: 20px ;
+    padding: 2px;
+}
+
+.headerContainer button:hover {
+    background-color: #457ec1;
+    cursor: pointer;
+    transition: 0.2s ease-in;
+}
+
+@media only screen and (max-width: 650px) {
+    .home {
+        justify-content: center;
+        align-items: center;
+    }
+    .headerContainer h1,
+    .headerContainer p {
+    }
+
+    .headerContainer {
+        margin-left: 0;
+        border-radius: 10px;
+        padding: 10px;
+        width: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        /* background-color: #3d7ac1; */
+
+    }
+
+    .headerContainer h1 {
+        font-size: 40px;
+        height: 30px;
+        margin-bottom: 50px;
+    }
+
+    .headerContainer p {
+        font-size: 30px;
+    }
+
+    .headerContainer button {
+        background-color:  #3d7ac1;
+        color: white;
+        margin-bottom: 30px;
+    }
+
+    .headerContainer button:hover {
+        background-color: #457ec1;
+        color: white ;
+    }
+}

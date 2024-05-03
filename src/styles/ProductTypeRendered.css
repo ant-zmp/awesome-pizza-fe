@@ -1,0 +1,45 @@
+.product-item .product-item-content {
+    border-radius: 3px;
+    margin: .3rem;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.product-item .product-image {
+    width: 70%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.img-container {
+    position: relative;
+    /*width: 50%;*/
+}
+
+/* Make the image responsive */
+.img-container img {
+    width: 100%;
+    height: auto;
+}
+
+/* Style the button and place it in the middle of the container/image */
+.img-container .img-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: rgba(0,0,0,0.3);
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.img-container .img-button:hover {
+    background-color: rgba(0,0,0,0.5);
+    transition: 0.2s ease-in;
+}

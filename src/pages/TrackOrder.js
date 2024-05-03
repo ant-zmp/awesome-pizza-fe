@@ -1,0 +1,113 @@
+import React, {useEffect, useRef, useState} from 'react';
+import {useParams} from "react-router-dom";
+import {Button} from "primereact/button";
+import {motion} from "framer-motion";
+import axios from "axios";
+import {Toast} from "primereact/toast";
+import OrderViewer from "../components/OrderViewer";
+import {Field, Form} from "react-final-form";
+import {InputText} from "primereact/inputtext";
+import {classNames} from "primereact/utils";
+
+function TrackOrder() {
+
+    let {id} = useParams();
+    const toast = useRef(null);
+
+    const [orderCode, setOrderCode] = useState(id);
+    const [order, setOrder] = useState();
+
+    const clearOrderCode = () => setOrderCode(null);
+
+    useEffect(() => {
+        fetchOrder();
+    }, [orderCode]);
+
+    const fetchOrder = () => {
+        if (orderCode) {
+            axios.get("http://localhost:8080/customer/order/" + orderCode)
+                .then(res => setOrder(res.data))
+                .catch(err => {
+                    console.log(err)
+                    showError(err.response.data.message)
+                })
+        } else {
+            setOrder(null);
+            setOrderCode(null)
+        }
+    }
+
+    const showError = (detail) => {
+        toast.current.show({severity: 'error', summary: 'Error', detail: detail, life: 3000})
+    }
+
+    const searchOrder = (data) => {
+        setOrderCode(data.orderCode);
+    }
+
+    const validate = (data) => {
+        let errors = {};
+
+        if (!data.orderCode) {
+            errors.orderCode = 'A code is required.';
+        } else if (!/^[A-Za-z0-9]{3}-[A-Za-z0-9]{3}$/.test(data.orderCode)) {
+            errors.orderCode = 'Invalid order code.';
+        }
+
+        return errors;
+    };
+
+    const isFormFieldValid = (meta) => !!(meta.touched && meta.error);
+
+    const getFormErrorMessage = (meta) => {
+        return isFormFieldValid(meta) && <small className="p-error">{meta.error}</small>;
+    };
+
+
+
+    return (<motion.div
+        initial={{width: 0}}
+        animate={{width: "100%", transition: {bounce: 0, duration: 0.2}}}
+        exit={{width: 0, transition: {bounce: 0, duration: 0.2}}}>
+        <div>
+            <Toast ref={toast}/>
+            <h1>Your order</h1>
+            <div className={"col-12"}>
+
+                <div className={"d-flex flex-row align-items-center"}>
+                    <h2>Order Code:</h2>
+                    {orderCode && order ?
+                        <div className={"d-flex flex-row m-4 align-items-lg-center"}>
+                            <h2 className={"flex-column p-2"}><b>{orderCode}</b></h2>
+                            <Button className={"rounded-4 "} label={"Clear"} onClick={clearOrderCode}/>
+                        </div> :
+
+                        <Form onSubmit={searchOrder} initialValues={{"address": null}} validate={validate}
+                              render={({handleSubmit}) => (
+                                  <form onSubmit={handleSubmit} className="p-fluid">
+                                      <Field name="orderCode" render={({input, meta}) => (
+                                          <div className="orderCode">
+                                    <span className="p-float-label">
+                                        <InputText id="orderCode" {...input} autoFocus
+                                                   className={classNames({'p-invalid': isFormFieldValid(meta)})}/>
+                                        <label htmlFor="orderCode"
+                                               className={classNames({'p-error': isFormFieldValid(meta)})}>Order Code*</label>
+                                    </span>
+                                              {getFormErrorMessage(meta)}
+                                          </div>
+                                      )}/>
+                                      <Button type={"submit"} className="mt-2">Confirm order</Button>
+                                  </form>
+                              )}/>
+
+                    }
+                </div>
+                {order &&
+                    <div className={"col-12"}><OrderViewer adminView={false} order={order} refreshOrder={fetchOrder}/>
+                    </div>}
+            </div>
+        </div>
+    </motion.div>)
+}
+
+export default TrackOrder
