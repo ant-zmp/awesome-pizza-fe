@@ -15,11 +15,11 @@ export function Home() {
                 <p>Order online from your friendly neighborhood pizzeria</p>
 
                 <motion.button whileHover={{scale: 1.1}}
-                               onClick={() => navigate("/menu")}>Order now!
+                               onClick={() => navigate("/menu")}> Order
                 </motion.button>
 
                 <motion.button whileHover={{scale: 1.1}}
-                               onClick={() => navigate("/tracking")}>Check your order!
+                               onClick={() => navigate("/tracking")}> Track order
                 </motion.button>
             </div>
         </div>

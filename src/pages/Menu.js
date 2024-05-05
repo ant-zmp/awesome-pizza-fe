@@ -8,14 +8,12 @@ import {Dialog} from 'primereact/dialog';
 import {ListBox} from "primereact/listbox";
 import ProductTypeRenderer from "../components/ProductTypeRenderer";
 import ProductListItem from "../components/ProductListItem";
-import "../styles/Menu.css"
 import {Field, Form} from 'react-final-form';
 import {classNames} from 'primereact/utils';
 import {InputText} from "primereact/inputtext";
 import {InputTextarea} from "primereact/inputtextarea";
 import {Toast} from "primereact/toast";
 import {useNavigate} from "react-router-dom";
-
 
 function Menu() {
 
@@ -60,7 +58,8 @@ function Menu() {
     }
 
     const cartItemTemplate = (cartItem) => {
-        return <div>{cartItem.quantity} x ${cartItem.product.price} - {cartItem.product.name} = ${cartItem.product.price * cartItem.quantity}</div>
+        return <div>{cartItem.quantity} x ${cartItem.product.price} - {cartItem.product.name} =
+            ${cartItem.product.price * cartItem.quantity}</div>
     }
 
     const onAdd = (product) => {
@@ -146,8 +145,8 @@ function Menu() {
         setCart({});
     }
 
-    const gotoTrackingPage = () =>{
-        navigate("/tracking/"+order.orderCode);
+    const gotoTrackingPage = () => {
+        navigate("/tracking/" + order.orderCode);
     }
 
     return (
@@ -168,48 +167,70 @@ function Menu() {
                     <Carousel value={productTypes} numVisible={3} numScroll={3}
                               itemTemplate={(i) => ProductTypeRenderer(i, () => selectType(i))}
                               header={<h5>Categories:</h5>}/>
-                    <div className="w-100">
-                        {
-                            products.length > 0 &&
-                            <DataScroller value={products} itemTemplate={itemTemplate} rows={5} scrollHeight="500px"
-                            />}
-                    </div>
+                    <div className="d-flex flex-column h-100">
+                        <div>
 
-                    <div className={"d-flex flex-row align-items-end"}>
-                        <Button label={"Review order"} onClick={openDialog} disabled={Object.values(cart).length === 0}/>
-                    </div>
+                            {
+                                products.length > 0 &&
 
-                    <Dialog onHide={closeDialog} visible={dialogVisible} header={"Order review"} closable={true}>
-                        <p>Are you sure to conclude this order?</p>
-                        <ListBox options={Object.values(cart)} itemTemplate={cartItemTemplate}/>
+                                <DataScroller value={products} itemTemplate={itemTemplate} rows={5} scrollHeight="500px"
+                                />}
+                        </div>
+                        <div className={"d-flex flex-row justify-content-end m-4"}>
+                            <motion.button whileHover={{scale: 1.1}} onClick={openDialog} className={"rounded-4"}
+                                           style={{backgroundColor:"#3d7ac1", color:"white", borderStyle:"hidden", padding:"10px"}}
+                                    disabled={Object.values(cart).length === 0}>
+                                Review order
+                            </motion.button>
+                        </div>
+                    </div>
+                    <Dialog onHide={closeDialog} visible={dialogVisible} header={"Order review"}
+                            closable={true} className={"h-50 w-50"} resizable={false}>
+                        <h5><b>Products:</b></h5>
+                        <ListBox className={"overflow-y-auto"} options={Object.values(cart)}
+                                 itemTemplate={cartItemTemplate}
+                                 style={{height: "40%"}}
+                        />
+                        <div className={"d-flex justify-content-end"}
+                             style={{marginRight: "5px"}}>Total: <b>${calculateTotal()}</b></div>
 
                         <Form onSubmit={confirmOrder} initialValues={{"address": null}} validate={validate}
                               render={({handleSubmit}) => (
                                   <form onSubmit={handleSubmit} onReset={closeDialog} className="p-fluid">
+                                      <h6><b>Your address:</b></h6>
                                       <Field name="address" render={({input, meta}) => (
                                           <div className="field">
-                                    <span className="p-float-label">
+                                                  <span className="p-float-label">
                                         <InputText id="address" {...input} autoFocus
                                                    className={classNames({'p-invalid': isFormFieldValid(meta)})}/>
                                         <label htmlFor="address"
-                                               className={classNames({'p-error': isFormFieldValid(meta)})}>Address *</label>
+                                               className={classNames({'p-error': isFormFieldValid(meta)})}></label>
                                     </span>
                                               {getFormErrorMessage(meta)}
                                           </div>
                                       )}/>
+                                      <div className={"m-4"}/>
+                                      <h6><b>Additional notes:</b></h6>
                                       <Field name="notes" render={({input}) => (
                                           <div className="field">
-                                    <span className="p-float-label">
+                                                  <span className="p-float-label">
                                         <InputTextarea id="notes" {...input} autoFocus/>
-                                        <label htmlFor="notes">Additional notes</label>
+                                                      {/*<label htmlFor="notes"></label>*/}
                                     </span>
                                           </div>
                                       )}/>
-                                      <div className={"flex-column"}>Total: ${calculateTotal()}</div>
-                                      <Button type={"submit"} className="mt-2">Confirm order</Button>
-                                      <Button type={"reset"} className="mt-2">Go back</Button>
+                                      <br/>
+                                      <div className={"d-flex flex-row justify-content-end"} style={{marginTop:"6px"}}>
+                                          <motion.button whileHover={{scale: 1.05}}  type={"submit"} className="m-1 p-1 rounded-4 w-25"
+                                                  style={{backgroundColor: "#459e0d", color:"white", borderStyle: "hidden"}}>Confirm order
+                                          </motion.button>
+                                          <motion.button whileHover={{scale: 1.05}} type={"reset"} className="m-1 p-1 rounded-4 w-25"
+                                                  style={{backgroundColor: "#bf2727", color:"white", borderStyle: "hidden"}}>Go back
+                                          </motion.button>
+                                      </div>
                                   </form>
                               )}/>
+
                     </Dialog>
 
                 </div>}
