@@ -36,8 +36,7 @@ function ProductListItem({product, onAdd, onRemove}) {
 
     return (
         <div key={"product-" + product.id} className="d-flex flex-row justify-content-evenly p-1 m-1"
-             style={{border: "1px solid", borderRadius: "10px", borderColor: "rgb(200,200,200)"}}
-        >
+             style={{border: "1px solid", borderRadius: "10px", borderColor: "rgb(200,200,200)"}}>
             <div className={"d-flex flex-column justify-content-center"
                 }
                      style={{border:"1px", borderRadius:"5px", marginRight:"4px"}}>

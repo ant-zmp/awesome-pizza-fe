@@ -34,7 +34,9 @@ function ManageOrder() {
     return (<motion.div
         initial={{width: 0}}
         animate={{width: "100%", transition: {bounce: 0, duration: 0.2}}}
-        exit={{width: 0, transition: {bounce: 0, duration: 0.2}}}>
+        exit={{width: 0, transition: {bounce: 0, duration: 0.2}}}
+        className={"d-flex flex-column align-items-center"}
+    >
         <Toast ref={toast}/>
         <h1>Next Order</h1>
         {loading && <ProgressSpinner/>}

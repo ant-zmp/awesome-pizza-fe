@@ -64,49 +64,44 @@ function TrackOrder() {
     };
 
 
-
     return (<motion.div
         initial={{width: 0}}
         animate={{width: "100%", transition: {bounce: 0, duration: 0.2}}}
         exit={{width: 0, transition: {bounce: 0, duration: 0.2}}}>
-        <div>
             <Toast ref={toast}/>
-            <h1>Your order</h1>
-            <div className={"col-12"}>
+            <div className={"d-flex flex-row align-items-center justify-content-center p-4"}>
+                <h2>Order Code:</h2>
+                {orderCode && order ?
+                    <div className={"d-flex m-2 align-items-center"}>
+                        <h2 className={"p-2"}><b>{orderCode}</b></h2>
+                        <Button className={"rounded-4 h-25"} label={"Clear"} onClick={clearOrderCode} style={{backgroundColor:"#3d7ac1"}}/>
+                    </div> :
 
-                <div className={"d-flex flex-row align-items-center"}>
-                    <h2>Order Code:</h2>
-                    {orderCode && order ?
-                        <div className={"d-flex flex-row m-4 align-items-lg-center"}>
-                            <h2 className={"flex-column p-2"}><b>{orderCode}</b></h2>
-                            <Button className={"rounded-4 "} label={"Clear"} onClick={clearOrderCode}/>
-                        </div> :
+                    <Form onSubmit={searchOrder} initialValues={{"address": null}} validate={validate}
+                          render={({handleSubmit}) => (
+                              <form onSubmit={handleSubmit} className="d-flex flex-row m-2 align-items-center">
+                                  <Field name="orderCode" render={({input, meta}) => (
+                                      <div>
+                                         <span className="flex-column p-float-label">
+                                             <InputText id="orderCode" {...input} autoFocus
+                                                        className={classNames({'p-invalid': isFormFieldValid(meta)})}/>
+                                             <label htmlFor="orderCode"
+                                                    className={classNames({'p-error': isFormFieldValid(meta)})}>Order Code*</label>
+                                         </span>
+                                          {getFormErrorMessage(meta)}
+                                      </div>
+                                  )}/>
+                                  <Button type={"submit"} className="flex-column mt-2 rounded-4"
+                                          style={{width: "100%", height: "auto", marginLeft:"4px", backgroundColor:"#3d7ac1"}}>Confirm
+                                      order</Button>
+                              </form>
+                          )}/>
 
-                        <Form onSubmit={searchOrder} initialValues={{"address": null}} validate={validate}
-                              render={({handleSubmit}) => (
-                                  <form onSubmit={handleSubmit} className="p-fluid">
-                                      <Field name="orderCode" render={({input, meta}) => (
-                                          <div className="orderCode">
-                                    <span className="p-float-label">
-                                        <InputText id="orderCode" {...input} autoFocus
-                                                   className={classNames({'p-invalid': isFormFieldValid(meta)})}/>
-                                        <label htmlFor="orderCode"
-                                               className={classNames({'p-error': isFormFieldValid(meta)})}>Order Code*</label>
-                                    </span>
-                                              {getFormErrorMessage(meta)}
-                                          </div>
-                                      )}/>
-                                      <Button type={"submit"} className="mt-2">Confirm order</Button>
-                                  </form>
-                              )}/>
-
-                    }
-                </div>
-                {order &&
-                    <div className={"col-12"}><OrderViewer adminView={false} order={order} refreshOrder={fetchOrder}/>
-                    </div>}
+                }
             </div>
-        </div>
+            {order &&
+                <div className={"d-flex flex-column align-items-center"}><OrderViewer adminView={false} order={order} fetchOrder={fetchOrder}/>
+                </div>}
     </motion.div>)
 }
 

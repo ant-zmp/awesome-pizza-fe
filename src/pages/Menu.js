@@ -14,6 +14,7 @@ import {InputText} from "primereact/inputtext";
 import {InputTextarea} from "primereact/inputtextarea";
 import {Toast} from "primereact/toast";
 import {useNavigate} from "react-router-dom";
+import "../styles/Menu.css";
 
 function Menu() {
 
@@ -177,9 +178,11 @@ function Menu() {
                                 />}
                         </div>
                         <div className={"d-flex flex-row justify-content-end m-4"}>
-                            <motion.button whileHover={{scale: 1.1}} onClick={openDialog} className={"rounded-4"}
+                            <motion.button whileHover={{scale: 1.1}}
+                                           onClick={openDialog}
+                                           className={"rounded-4"}
                                            style={{backgroundColor:"#3d7ac1", color:"white", borderStyle:"hidden", padding:"10px"}}
-                                    disabled={Object.values(cart).length === 0}>
+                                           disabled={Object.values(cart).length === 0}>
                                 Review order
                             </motion.button>
                         </div>

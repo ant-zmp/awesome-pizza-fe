@@ -54,31 +54,42 @@ function OrderViewer({order, adminView, fetchOrder}) {
             </div>)
     }
 
+    const transformDate = (inputDate) => {
+        let date = new Date(inputDate);
+        return `${("0" + (date.getMonth() + 1)).slice(-2)}/${("0" + date.getDate()).slice(-2)}/${date.getFullYear()} ${("0" + date.getHours()).slice(-2)}:${("0" + date.getMinutes()).slice(-2)}`;
+    }
+
     const renderAdminButton = () => {
         let label = "PLACED" === order.status ? "Accept order" : "Send for delivery";
         let msg = "PLACED" === order.status ? "Order accepted" : "Order sent for delivery";
 
-        return <div>
+        return <div className={"d-flex flex-row justify-content-end"}>
             {order.status !== "DISPATCHED" &&
-                <Button label={label} onClick={() => {
-                    axios.put("http://localhost:8080/admin/order/" + order.id + "/change-status")
-                        .then(res => showInfo(msg))
-                        .catch(err => showError(err.response.data.message))
-                        .finally(() => fetchOrder());
-                }}/>}
+                <Button label={label}
+                        className={"m-2 rounded-4"}
+                        onClick={() => {
+                            axios.put("http://localhost:8080/admin/order/" + order.id + "/change-status")
+                                .then(res => showInfo(msg))
+                                .catch(err => showError(err.response.data.message))
+                                .finally(() => fetchOrder());
+                        }}
+                        style={{backgroundColor: "#459e0d", color: "white", borderStyle: "hidden"}}
 
-            <Button label={"Deny order"} onClick={openDialog}/>
+                />}
+            <Button label={"Deny order"} className={"m-2 rounded-4"} onClick={openDialog}
+                    style={{backgroundColor: "#bf2727", color: "white", borderStyle: "hidden"}}/>
         </div>
     }
 
     const renderCustomerButton = () => {
         if ("DISPATCHED" === order.status) {
-            return <Button label={"Confirm delivery"} onClick={() => {
+            return <Button label={"Confirm delivery"} className={"m-2 rounded-4"} onClick={() => {
                 axios.put("http://localhost:8080/customer/order/" + order.id + "/confirm-delivery")
                     .then(res => showInfo("Delivery confirmed."))
                     .catch(err => showError(err.response.data.message))
                     .finally(() => fetchOrder());
-            }}/>
+            }}
+                           style={{backgroundColor: "#459e0d", color: "white", borderStyle: "hidden"}}/>
         }
     }
 
@@ -112,9 +123,15 @@ function OrderViewer({order, adminView, fetchOrder}) {
             .finally(() => fetchOrder());
     }
 
-    return (<div ref={toast}>
+    return (<div style={{
+            border: "1px solid",
+            borderRadius: "10px",
+            borderColor: "rgb(200,200,200)",
+            width: "90%",
+            padding: "4px"
+        }}>
             <Toast ref={toast}/>
-            <h1> Order <b>{order.orderCode}</b></h1>
+            {adminView && <h1> Order <b>{order.orderCode}</b></h1>}
             <br/>
             <h2>Status:</h2>
             {order.status !== "CANCELLED" ?
@@ -129,7 +146,7 @@ function OrderViewer({order, adminView, fetchOrder}) {
             <h3><b>Total:</b> ${order.totalPrice}</h3>
             <div className={"grid fluid m-0 border-top-1 border-left-1"} style={{borderColor: "#CCCCCC"}}>
                 {!adminView && renderRow("Orders in line before this one", order.inLineBefore)}
-                {renderRow("Order Date", order.orderDate)}
+                {renderRow("Order Date", transformDate(order.orderDate))}
                 {renderRow("Address", order.address)}
                 {renderRow("Notes", order.notes)}
                 {order.reason && renderRow("Order Code", order.reason)}
@@ -138,7 +155,8 @@ function OrderViewer({order, adminView, fetchOrder}) {
             {!["COMPLETED", "CANCELLED"].includes(order.status) && adminView && renderAdminButton()}
             {!adminView && renderCustomerButton()}
 
-            <Dialog onHide={closeDialog} visible={dialogVisible} header={"Order review"} closable={true}>
+            <Dialog onHide={closeDialog} visible={dialogVisible} header={"Order review"} closable={true}
+                    className={"w-50 h-50"}>
                 <p>Are you sure to deny this order?</p>
 
                 <Form onSubmit={confirmDenial} initialValues={{"address": null}} validate={validate}
